@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import {
   Button,
   Dialog,
@@ -9,9 +9,11 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { connect } from "react-redux";
-import Calendar from "../calendar-component/calendar.component";
 import fetchActivity from "../../redux/activity/fetch";
-import LinearIndeterminate from "../loading-component/loading.component";
+import LinearIndeterminate, {
+  LinearInDailog,
+} from "../loading-component/loading.component";
+const Calendar = lazy(() => import("../calendar-component/calendar.component"));
 
 const ResponsiveDialog = ({ getEvents, eventsList, Error, Loading }) => {
   const [open, setOpen] = React.useState(false);
@@ -32,10 +34,15 @@ const ResponsiveDialog = ({ getEvents, eventsList, Error, Loading }) => {
       end = details.end_time.split(" ");
       startDate = new Date(
         `${start[0]}, ${start[1]}, ${start[2]}, ${start[3] + " " + start[4]} `
-      ).toString();
+      );
+
+      startDate = startDate.toLocaleString("en-US", { timeZone: data.tz });
+
       endDate = new Date(
         `${end[0]}, ${end[1]}, ${end[2]}, ${end[3] + " " + end[4]}`
-      ).toString();
+      );
+
+      endDate = endDate.toLocaleString("en-US", { timeZone: data.tz });
 
       return activity.push({
         title: `Activity-${i}`,
@@ -67,7 +74,7 @@ const ResponsiveDialog = ({ getEvents, eventsList, Error, Loading }) => {
         {Loading ? (
           <LinearIndeterminate />
         ) : Error ? (
-          <div></div>
+          <div>Please, Check your internet Connection</div>
         ) : (
           eventsList.members.map((data, i) => (
             <div key={data.id}>
@@ -94,10 +101,12 @@ const ResponsiveDialog = ({ getEvents, eventsList, Error, Loading }) => {
                 aria-labelledby="responsive-dialog-title"
               >
                 <DialogTitle id="responsive-dialog-title">
-                  {`Activity of '${appointments.name}'`}
+                  {`'${appointments.name}' from ${appointments.location}`}
                 </DialogTitle>
                 <DialogContent>
-                  <Calendar appointments={appointments} />
+                  <Suspense fallback={<LinearInDailog />}>
+                    <Calendar appointments={appointments} />
+                  </Suspense>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose} color="primary" autoFocus>

@@ -3,14 +3,13 @@ import {
   fetchEventsSuccess,
   fetchEventsRequest,
 } from "./action";
-import {tasks} from "../../demo-data/tasks";
+import { tasks } from "../../demo-data/tasks";
 
 const fetchActivity = () => {
   return (dispatch) => {
     dispatch(fetchEventsRequest);
     return tasks()
       .then((response) => {
-          console.log(response)
         const activity = response;
         dispatch(fetchEventsSuccess(activity));
       })

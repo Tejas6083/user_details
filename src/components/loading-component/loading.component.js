@@ -10,6 +10,13 @@ const useStyles = makeStyles(() => ({
     marginTop: "2px",
     margin: "10px",
   },
+  dailog: {
+    height: "250px",
+    width: "97%",
+    borderRadius: "15px",
+    marginTop: "2px",
+    margin: "10px",
+  },
 }));
 
 const LinearIndeterminate = () => {
@@ -18,8 +25,21 @@ const LinearIndeterminate = () => {
 
   return (
     <div>
-      {arr.map(() => (
-        <Skeleton className={classes.skeleton} variant="rect" />
+      {arr.map((i) => (
+        <Skeleton key={i} className={classes.skeleton} variant="rect" />
+      ))}
+    </div>
+  );
+};
+
+export const LinearInDailog = () => {
+  const classes = useStyles();
+  const arr = [0, 1];
+
+  return (
+    <div>
+      {arr.map((i) => (
+        <Skeleton key={i} className={classes.dailog} variant="rect" />
       ))}
     </div>
   );
