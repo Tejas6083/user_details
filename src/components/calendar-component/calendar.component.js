@@ -252,7 +252,7 @@ const Calendar = (props) => {
       <Paper>
         <Scheduler data={data}>
           <ViewState
-            defaultCurrentDate={new Date().toISOString().slice(0, 10)}
+            defaultCurrentDate={new Date()}
           />
 
           {toggle ? (
